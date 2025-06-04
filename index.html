@@ -9,8 +9,11 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #121212, #1f1f1f);
-      color: #f1f1f1;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e');
+      background-size: cover;
+      background-position: center;
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,7 +22,7 @@
       padding: 20px;
     }
     .container {
-      background-color: #222;
+      background-color: rgba(0, 0, 0, 0.6);
       padding: 30px;
       border-radius: 16px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -27,7 +30,7 @@
       width: 100%;
     }
     h1 {
-      color: #00BFFF;
+      color: #00FFCC;
       margin-bottom: 20px;
     }
     p {
@@ -40,8 +43,8 @@
       border: none;
       margin-bottom: 20px;
       font-size: 1rem;
-      background-color: #333;
-      color: #fff;
+      background-color: #f1f1f1;
+      color: #333;
     }
     button {
       padding: 10px 20px;
@@ -63,20 +66,64 @@
     button:hover {
       opacity: 0.9;
     }
+    #resposta {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ffd;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Você vai ao evento?</h1>
     <p>Confirme sua presença preenchendo seu nome abaixo e clicando em uma das opções.</p>
-    <form action="https://formsubmit.co/convitemake@gmail.com" method="POST">
-      <input type="text" name="nome" placeholder="Seu nome" required />
-      <input type="hidden" name="Evento" value="Confirmação de presença" />
-      <button class="sim" name="confirmacao" value="Sim, eu vou!">✅ Vou</button>
-      <button class="nao" name="confirmacao" value="Não poderei ir." formnovalidate>❌ Não vou</button>
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://luiz123sla.github.io/obrigado">
-    </form>
+    <input type="text" id="nome" placeholder="Seu nome" required />
+    <div>
+      <button class="sim" onclick="enviarEmail(true)">✅ Vou</button>
+      <button class="nao" onclick="enviarEmail(false)">❌ Não vou</button>
+    </div>
+    <div id="resposta"></div>
   </div>
+
+  <script>
+    function enviarEmail(vai) {
+      const nome = document.getElementById('nome').value.trim();
+      if (!nome) {
+        alert('Por favor, digite seu nome.');
+        return;
+      }
+
+      const confirmacao = vai ? 'Sim, eu vou!' : 'Não poderei ir.';
+      const form = document.createElement('form');
+      form.action = 'https://formsubmit.co/convitemake@gmail.com';
+      form.method = 'POST';
+      form.style.display = 'none';
+
+      const inputNome = document.createElement('input');
+      inputNome.type = 'hidden';
+      inputNome.name = 'Nome';
+      inputNome.value = nome;
+
+      const inputResposta = document.createElement('input');
+      inputResposta.type = 'hidden';
+      inputResposta.name = 'Confirmação';
+      inputResposta.value = confirmacao;
+
+      const inputCaptcha = document.createElement('input');
+      inputCaptcha.type = 'hidden';
+      inputCaptcha.name = '_captcha';
+      inputCaptcha.value = 'false';
+
+      form.appendChild(inputNome);
+      form.appendChild(inputResposta);
+      form.appendChild(inputCaptcha);
+
+      document.body.appendChild(form);
+      form.submit();
+
+      document.getElementById('resposta').innerText = `Obrigado, ${nome}! Sua resposta foi registrada.`;
+    }
+  </script>
 </body>
 </html>
